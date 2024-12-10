@@ -64,14 +64,14 @@ def handle_message(event):
                             data="postback",
                             display_text="postback"
                         ),
-                        image_url=postback_icon
+                        #image_url=postback_icon
                     ),
                     QuickReplyItem(
                         action=MessageAction(
                             label="Message",
                             text="message"
                         ),
-                        image_url=message_icon
+                        #image_url=message_icon
                     ),
                     QuickReplyItem(
                         action=DatetimePickerAction(
@@ -79,7 +79,7 @@ def handle_message(event):
                             data="date",
                             mode="date"
                         ),
-                        image_url=date_icon
+                        #image_url=date_icon
                     ),
                     QuickReplyItem(
                         action=DatetimePickerAction(
@@ -87,7 +87,7 @@ def handle_message(event):
                             data="time",
                             mode="time"
                         ),
-                        image_url=time_icon
+                        #image_url=time_icon
                     ),
                     QuickReplyItem(
                         action=DatetimePickerAction(
@@ -98,7 +98,7 @@ def handle_message(event):
                             max="2025-01-01T00:00",
                             min="2023-01-01T00:00"
                         ),
-                        image_url=datetime_icon
+                        #image_url=datetime_icon
                     ),
                     QuickReplyItem(
                         action=CameraAction(label="Camera")
