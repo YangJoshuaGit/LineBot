@@ -9,11 +9,20 @@ from linebot.v3.messaging import (
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage
+    TextMessage,
+    QuickReply,
+    QuickReplyItem,
+    PostbackAction,
+    MessageAction,
+    DatetimePickerAction,
+    CameraAction,
+    CameraRollAction,
+    LocationAction
 )
 from linebot.v3.webhooks import (
     MessageEvent,
-    TextMessageContent
+    TextMessageContent,
+    PostbackEvent
 )
 
 
@@ -45,23 +54,80 @@ def callback():
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
-        #相手の送信した内容で条件分岐して回答を変数に代入
-        if event.message.text == 'hi':
-            msg = '1'
-        elif event.message.text == 'yo':
-            msg = '2'
-        elif event.message.text == 'yee':
-            msg = '3'
-        else:
-            msg = '4'
-
         line_bot_api = MessagingApi(api_client)
-        line_bot_api.reply_message_with_http_info(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=event.message.text)]
+        if event.message.text == "quick reply":
+            quickReply = QuickReply(
+                items=[
+                    QuickReplyItem(
+                        action=PostbackAction(
+                            label="Postback",
+                            data="postback",
+                            display_text="postback"
+                        ),
+                        image_url=postback_icon
+                    ),
+                    QuickReplyItem(
+                        action=MessageAction(
+                            label="Message",
+                            text="message"
+                        ),
+                        image_url=message_icon
+                    ),
+                    QuickReplyItem(
+                        action=DatetimePickerAction(
+                            label="Date",
+                            data="date",
+                            mode="date"
+                        ),
+                        image_url=date_icon
+                    ),
+                    QuickReplyItem(
+                        action=DatetimePickerAction(
+                            label="Time",
+                            data="time",
+                            mode="time"
+                        ),
+                        image_url=time_icon
+                    ),
+                    QuickReplyItem(
+                        action=DatetimePickerAction(
+                            label="Datetime",
+                            data="datetime",
+                            mode="datetime",
+                            initial="2024-01-01T00:00",
+                            max="2025-01-01T00:00",
+                            min="2023-01-01T00:00"
+                        ),
+                        image_url=datetime_icon
+                    ),
+                    QuickReplyItem(
+                        action=CameraAction(label="Camera")
+                    ),
+                    QuickReplyItem(
+                        action=CameraRollAction(label="Camera Roll")
+                    ),
+                    QuickReplyItem(
+                        action=LocationAction(label="Location")
+                    )
+                ]
             )
-        )
+
+            line_bot_api.reply_message(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(
+                        text='請選擇項目',
+                        quick_reply=quickReply
+                    )]
+                )
+            )
+        else:
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=event.message.text)]
+                )
+            )
 
 
 if __name__ == "__main__":
