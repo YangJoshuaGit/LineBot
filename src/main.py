@@ -1,6 +1,6 @@
 import os
 from quickreplybottom import *
-from databaseGS import Database
+from database import Database
 from getStringFromLine import *
 from delete import deleteData
 import param
